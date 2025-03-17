@@ -59,29 +59,31 @@ def fetch_inspections(inspections_number):
                         comment = comment.strip()
 
                     if comment and len(comment) > 0:
-                        facility_name = facility_name if facility_name else ""
-                        address = address if address else ""
-                        date_str = date_str if date_str else ""
-                        person_in_charge = person_in_charge if person_in_charge else ""
-                        comment = comment if comment else "" 
-                        return facility_name, address, date_str, person_in_charge, comment
+                        inspection_data = {
+                            "facility_name": facility_name,
+                            "address": address,
+                            "date_str": date_str,
+                            "person_in_charge": person_in_charge,
+                            "comment": comment
+                        }
+                        return inspection_data
                             
 async def main(): 
     async with Actor:
         inspection_number = 1
         page_start = 1
         while True:
-            facility_name, address, date_str, person_in_charge, comment = fetch_inspections(inspection_number)
-            if not facility_name:
+            has_more_data = fetch_inspections(inspection_number)
+            if not has_more_data:
                 break
             else:
                 await Actor.push_data(
                     {
-                        "Facility Name": facility_name,
-                        "Address": address,
-                        "Inspection Date": date_str,
-                        "Person in Charge": person_in_charge,
-                        "Gasket Violations": comment
+                        "Facility Name": has_more_data.get('facility_name', ''),
+                        "Address": has_more_data.get('address', ''),
+                        "Inspection Date": has_more_data.get('date_str', ''),
+                        "Person in Charge": has_more_data.get('person_in_charge', ''),
+                        "Gasket Violations": has_more_data.get('comment', '')
                     }
                 )
             page_start += 1 # Go to the next page
