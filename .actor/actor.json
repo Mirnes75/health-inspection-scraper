@@ -1,0 +1,58 @@
+{
+	"actorSpecification": 1,
+	"name": "Health-Lake-Inspection-Scraper",
+	"title": "Health Lake Inspection Scraper",
+	"description": "The Lake County Health Inspection Data Scraper is designed to automate the extraction of public health inspection data from the official Lake County health inspection website. This tool aims to facilitate the monitoring of food safety and hygiene standards across various establishments within Lake County.",
+	"version": "0.0",
+	"meta": {
+		"templateId": "python-start"
+	},
+	"input": "./input_schema.json",
+	"readme": "../README.md",
+	"dockerfile": "./Dockerfile",
+	"storages": {
+		"dataset": {
+			"actorSpecification": 1,
+			"title": "Health Inspection Scraper",
+			"views": {
+				"results": {
+					"title": "Scraped Results",
+					"transformation": {
+						"fields": [
+							"Facility Name",
+							"Address",							
+							"Inspection Date",
+							"Person in Charge",
+							"Gasket Violations"
+						]
+					},
+					"display": {
+						"component": "table",
+						"properties": {
+							"Facility Name": {
+								"label": "Facility Name",
+								"format": "string"
+							},
+							"Address": {
+								"label": "Address",
+								"format": "string"
+							},
+							"Inspection Date": {
+								"label": "Inspection Date",
+								"format": "string"
+							},
+							"Person in Charge": {
+								"label": "Person in Charge",
+								"format": "string"
+							},
+							"Gasket Violations": {
+								"label": "Gasket Violations",
+								"format": "string"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
