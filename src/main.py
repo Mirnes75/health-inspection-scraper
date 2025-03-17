@@ -59,6 +59,11 @@ def fetch_inspections(inspections_number):
                         comment = comment.strip()
 
                     if comment and len(comment) > 0:
+                        facility_name = facility_name if facility_name else ""
+                        address = address if address else ""
+                        date_str = date_str if date_str else ""
+                        person_in_charge = person_in_charge if person_in_charge else ""
+                        comment = comment if comment else "" 
                         return facility_name, address, date_str, person_in_charge, comment
                             
 async def main(): 
