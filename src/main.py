@@ -59,14 +59,15 @@ def fetch_inspections(inspections_number):
                         comment = comment.strip()
 
                     if comment and len(comment) > 0:
-                        inspection_data = {
+                        data.append({
                             "facility_name": facility_name,
                             "address": address,
                             "date_str": date_str,
                             "person_in_charge": person_in_charge,
                             "comment": comment
-                        }
-                        return inspection_data
+                        })
+        return True
+    return False
                             
 async def main(): 
     async with Actor:
@@ -74,18 +75,19 @@ async def main():
         page_start = 1
         while True:
             has_more_data = fetch_inspections(inspection_number)
+            print("inspection number", inspection_number)
             if not has_more_data:
                 break
-            else:
-                await Actor.push_data(
-                    {
-                        "Facility Name": has_more_data.get('facility_name', ''),
-                        "Address": has_more_data.get('address', ''),
-                        "Inspection Date": has_more_data.get('date_str', ''),
-                        "Person in Charge": has_more_data.get('person_in_charge', ''),
-                        "Gasket Violations": has_more_data.get('comment', '')
-                    }
-                )
             page_start += 1 # Go to the next page
             inspection_number += 25 
+        for inspection_data in data:
+            await Actor.push_data(
+                {
+                    "Facility Name": inspection_data.get('facility_name', ''),
+                    "Address": inspection_data.get('address', ''),
+                    "Inspection Date": inspection_data.get('date_str', ''),
+                    "Person in Charge": inspection_data.get('person_in_charge', ''),
+                    "Gasket Violations": inspection_data.get('comment', '')
+                }
+            )
         print("Scraping completed!")
